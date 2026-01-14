@@ -1,9 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+
+typedef struct {
+    char player[100];
+    int turn;
+    int hit;
+    int blow;
+}guess;
 
 int main() {
     int current_turn = 1; /* odd: Player1, even: Player2 */
+    guess g1, g2;
     char player1_name[100];
     char player2_name[100];
     printf("Enter Player1's name: ");
@@ -24,7 +31,7 @@ int main() {
         } else {
             printf("%s's turn\n", player2_name);
         }
-        
+
         printf("Enter your guess: ");
         int guess[4];
         scanf("%d%d%d%d", &guess[0], &guess[1], &guess[2], &guess[3]);
