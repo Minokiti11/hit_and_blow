@@ -1,8 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct {
+    char player[100];
+    int turn;
+    int hit;
+    int blow;
+}guess;
+
 
 int main() {
+    guess g1, g2;
     char player1[100];
     char player2[100];
     printf("Enter Player1's name: ");
