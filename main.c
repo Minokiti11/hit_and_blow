@@ -48,32 +48,25 @@ int blow_count(int answer[], int guess[]) {
     return blow;
 }
 
-void insert_guess(guess *g[], char player_name[], int turn, int hit, int blow) {
+void insert_guess(guess g[], char player_name[], int turn, int hit, int blow) {
     if (turn < 1 || turn > 100) {
         return;
     }
-    if (g[turn - 1] == NULL) {
-        g[turn - 1] = malloc(sizeof(guess));
-        if (g[turn - 1] == NULL) {
-            fprintf(stderr, "Failed to allocate guess history.\n");
-            exit(1);
-        }
-    }
-    g[turn - 1]->turn = turn;
-    strcpy(g[turn - 1]->player, player_name);
-    g[turn - 1]->hit = hit;
-    g[turn - 1]->blow = blow;
+    g[turn - 1].turn = turn;
+    strcpy(g[turn - 1].player, player_name);
+    g[turn - 1].hit = hit;
+    g[turn - 1].blow = blow;
 }
 
 
 /* これまでの履歴を表示*/
-void print_guess_history(guess *g[]) {
+void print_guess_history(guess g[]) {
     printf("-Guess History:---------------------------------\n");
     for (int i = 0; i < 100; i++) {
-        if (g[i] != NULL) {
-            int player_name_spaces = strlen(g[i]->player);
+        if (g[i].player[0] != '\0') {
+            int player_name_spaces = strlen(g[i].player);
             int num_spaces = 11 - player_name_spaces;
-            printf("| Turn %d - Player: %s, Hit: %d, Blow: %d", g[i]->turn, g[i]->player, g[i]->hit, g[i]->blow);
+            printf("| Turn %d - Player: %s, Hit: %d, Blow: %d", g[i].turn, g[i].player, g[i].hit, g[i].blow);
             for (int j = 0; j < num_spaces; j++) {
                 printf(" ");
             }
@@ -86,22 +79,22 @@ void print_guess_history(guess *g[]) {
 int main() {
     srand((unsigned)time(NULL));
     int current_turn = 1; /* odd: Player1, even: Player2 */
-    guess *guesses[100]; /* 最大100ターン分の履歴を保存可能 */
+    guess guesses[100]; /* 最大100ターン分の履歴を保存可能 */
     for (int i = 0; i < 100; i++) {
-        guesses[i] = NULL;
+        guesses[i].player[0] = '\0';
     }
 
     char player1_name[100];
     char player2_name[100];
     char current_player_name[100];
     printf("Enter Player1's name(maximum 10 characters): ");
-    scanf("%s", player1_name);/*p1の名前*/
+    scanf("%s", player1_name);/*Player1の名前*/
     while (strlen(player1_name) > 10) {
         printf("Name too long. Please enter a name with a maximum of 10 characters: ");
         scanf("%s", player1_name);
     }
     printf("Enter Player2's name: ");
-    scanf("%s", player2_name);/*p2の名前*/
+    scanf("%s", player2_name);/*Player2の名前*/
     while (strlen(player2_name) > 10) {
         printf("Name too long. Please enter a name with a maximum of 10 characters: ");
         scanf("%s", player2_name);
@@ -136,10 +129,6 @@ int main() {
             break;
         }
         current_turn++;
-    }
-
-    for (int i = 0; i < 100; i++) {
-        free(guesses[i]);
     }
 
     return 0;
