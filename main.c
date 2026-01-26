@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
+#include <ctype.h>
 
 typedef struct {
     char player[100];
@@ -81,6 +83,138 @@ void print_guess_history(guess g[]) {
     printf("------------------------------------------------\n");
 }
 
+/* ASCIIアートで文字を表示（5行の高さ） */
+void print_ascii_char(char c, int line) {
+    c = toupper(c);
+    
+    const char *lines[5];
+    switch(c) {
+        case 'A':
+            lines[0] = "  ▄▄▄   "; lines[1] = " ▀   ▀  "; lines[2] = " ▄▄▄▄▄  "; lines[3] = " ▀   ▀  "; lines[4] = " ▀   ▀  "; break;
+        case 'B':
+            lines[0] = " █████  "; lines[1] = " █   █  "; lines[2] = " █████  "; lines[3] = " █   █  "; lines[4] = " █████  "; break;
+        case 'C':
+            lines[0] = "  ▄▄▄▄  "; lines[1] = " █      "; lines[2] = " █      "; lines[3] = " █      "; lines[4] = "  ▀▀▀▀  "; break;
+        case 'D':
+            lines[0] = " █████  "; lines[1] = " █   █  "; lines[2] = " █   █  "; lines[3] = " █   █  "; lines[4] = " █████  "; break;
+        case 'E':
+            lines[0] = " █████  "; lines[1] = " █      "; lines[2] = " █████  "; lines[3] = " █      "; lines[4] = " █████  "; break;
+        case 'F':
+            lines[0] = " █████  "; lines[1] = " █      "; lines[2] = " █████  "; lines[3] = " █      "; lines[4] = " █      "; break;
+        case 'G':
+            lines[0] = "  ▄▄▄▄  "; lines[1] = " █      "; lines[2] = " █  ███ "; lines[3] = " █   █  "; lines[4] = "  ▀▀▀▀  "; break;
+        case 'H':
+            lines[0] = " █   █  "; lines[1] = " █   █  "; lines[2] = " █████  "; lines[3] = " █   █  "; lines[4] = " █   █  "; break;
+        case 'I':
+            lines[0] = " █████  "; lines[1] = "   █    "; lines[2] = "   █    "; lines[3] = "   █    "; lines[4] = " █████  "; break;
+        case 'J':
+            lines[0] = " █████  "; lines[1] = "    █   "; lines[2] = "    █   "; lines[3] = " █  █   "; lines[4] = "  ▀▀    "; break;
+        case 'K':
+            lines[0] = " █   █  "; lines[1] = " █  █   "; lines[2] = " ███    "; lines[3] = " █  █   "; lines[4] = " █   █  "; break;
+        case 'L':
+            lines[0] = " █      "; lines[1] = " █      "; lines[2] = " █      "; lines[3] = " █      "; lines[4] = " █████  "; break;
+        case 'M':
+            lines[0] = " █   █  "; lines[1] = " ██ ██  "; lines[2] = " █ ▀ █  "; lines[3] = " █   █  "; lines[4] = " █   █  "; break;
+        case 'N':
+            lines[0] = " █   █  "; lines[1] = " ██  █  "; lines[2] = " █ █ █  "; lines[3] = " █  ██  "; lines[4] = " █   █  "; break;
+        case 'O':
+            lines[0] = "  ▄▄▄   "; lines[1] = " █   █  "; lines[2] = " █   █  "; lines[3] = " █   █  "; lines[4] = "  ▀▀▀   "; break;
+        case 'P':
+            lines[0] = " █████  "; lines[1] = " █   █  "; lines[2] = " █████  "; lines[3] = " █      "; lines[4] = " █      "; break;
+        case 'Q':
+            lines[0] = "  ▄▄▄   "; lines[1] = " █   █  "; lines[2] = " █   █  "; lines[3] = " █  ██  "; lines[4] = "  ▀▀ █  "; break;
+        case 'R':
+            lines[0] = " █████  "; lines[1] = " █   █  "; lines[2] = " █████  "; lines[3] = " █  █   "; lines[4] = " █   █  "; break;
+        case 'S':
+            lines[0] = "  ▄▄▄▄  "; lines[1] = " █      "; lines[2] = "  ▀▀▀▄  "; lines[3] = "     █  "; lines[4] = " ▀▀▀▀   "; break;
+        case 'T':
+            lines[0] = " █████  "; lines[1] = "   █    "; lines[2] = "   █    "; lines[3] = "   █    "; lines[4] = "   █    "; break;
+        case 'U':
+            lines[0] = " █   █  "; lines[1] = " █   █  "; lines[2] = " █   █  "; lines[3] = " █   █  "; lines[4] = "  ▀▀▀   "; break;
+        case 'V':
+            lines[0] = " █   █  "; lines[1] = " █   █  "; lines[2] = " █   █  "; lines[3] = "  █ █   "; lines[4] = "   ▀    "; break;
+        case 'W':
+            lines[0] = " █   █  "; lines[1] = " █   █  "; lines[2] = " █ ▄ █  "; lines[3] = " ██ ██  "; lines[4] = " █   █  "; break;
+        case 'X':
+            lines[0] = " █   █  "; lines[1] = "  █ █   "; lines[2] = "   ▀    "; lines[3] = "  █ █   "; lines[4] = " █   █  "; break;
+        case 'Y':
+            lines[0] = " █   █  "; lines[1] = "  █ █   "; lines[2] = "   ▀    "; lines[3] = "   █    "; lines[4] = "   █    "; break;
+        case 'Z':
+            lines[0] = " █████  "; lines[1] = "    █   "; lines[2] = "   █    "; lines[3] = "  █     "; lines[4] = " █████  "; break;
+        case '0':
+            lines[0] = "  ▄▄▄   "; lines[1] = " █▄ ▄█  "; lines[2] = " █ █ █  "; lines[3] = " █▀ ▀█  "; lines[4] = "  ▀▀▀   "; break;
+        case '1':
+            lines[0] = "   ▄█   "; lines[1] = "  ▀ █   "; lines[2] = "    █   "; lines[3] = "    █   "; lines[4] = "  █████ "; break;
+        case '2':
+            lines[0] = "  ▄▄▄   "; lines[1] = " ▀   █  "; lines[2] = "   ▄▀   "; lines[3] = "  █     "; lines[4] = " █████  "; break;
+        case '3':
+            lines[0] = " █████  "; lines[1] = "     █  "; lines[2] = "  ▀▀▀   "; lines[3] = "     █  "; lines[4] = " █████  "; break;
+        case '4':
+            lines[0] = " █   █  "; lines[1] = " █   █  "; lines[2] = " █████  "; lines[3] = "     █  "; lines[4] = "     █  "; break;
+        case '5':
+            lines[0] = " █████  "; lines[1] = " █      "; lines[2] = " █████  "; lines[3] = "     █  "; lines[4] = " █████  "; break;
+        case '6':
+            lines[0] = "  ▄▄▄   "; lines[1] = " █      "; lines[2] = " █████  "; lines[3] = " █   █  "; lines[4] = "  ▀▀▀   "; break;
+        case '7':
+            lines[0] = " █████  "; lines[1] = "     █  "; lines[2] = "    █   "; lines[3] = "   █    "; lines[4] = "  █     "; break;
+        case '8':
+            lines[0] = "  ▄▄▄   "; lines[1] = " █   █  "; lines[2] = "  ▀▀▀   "; lines[3] = " █   █  "; lines[4] = "  ▀▀▀   "; break;
+        case '9':
+            lines[0] = "  ▄▄▄   "; lines[1] = " █   █  "; lines[2] = "  ▀▀▀█  "; lines[3] = "     █  "; lines[4] = "  ▀▀▀   "; break;
+        case ' ':
+            lines[0] = "    "; lines[1] = "    "; lines[2] = "    "; lines[3] = "    "; lines[4] = "    "; break;
+        default:
+            lines[0] = "  ▄▄▄   "; lines[1] = " █   █  "; lines[2] = " █   █  "; lines[3] = " █   █  "; lines[4] = "  ▀▀▀   "; break;
+    }
+    
+    printf("%s", lines[line]);
+}
+
+/* 名前をASCIIアートで表示 */
+void print_name_ascii(const char *name, int offset) {
+    for (int line = 0; line < 5; line++) {
+        /* オフセット分の空行を追加（上下アニメーション用） */
+        if (line == 0 && offset > 0) {
+            for (int i = 0; i < offset; i++) {
+                printf("\n");
+            }
+        }
+        
+        printf("            ");
+        for (int i = 0; i < strlen(name) && i < 10; i++) {
+            print_ascii_char(name[i], line);
+        }
+        printf("\n");
+        
+        /* 最後の行の後にオフセット分の空行を追加 */
+        if (line == 4 && offset > 0) {
+            for (int i = 0; i < offset; i++) {
+                printf("\n");
+            }
+        }
+    }
+}
+
+/* 勝者の名前を表示 */
+void display_winner_result(const char *winner_name) {
+    system("clear");
+    
+    printf("\n");
+    printf("  ____                             _         _       _   _                 _ \n");
+    printf(" / ___|___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_(_) ___  _ __  ___| |\n");
+    printf("| |   / _ \\| '_ \\ / _` | '__/ _` | __| | | | |/ _` | __| |/ _ \\| '_ \\/ __| |\n");
+    printf("| |__| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \\__ \\_|\n");
+    printf(" \\____\\___/|_| |_|\\__, |_|  \\__,_|\\__|\\__,_|_|\\__,_|\\__|_|\\___/|_| |_|___(_)\n");
+    printf("                  |___/                                                       \n");
+    printf("\n\n");
+
+    
+    print_name_ascii(winner_name, 0);
+    
+    printf("\n");
+    printf("                🎉 🎊 🏆 VICTORY! 🏆 🎊 🎉\n");
+}
+
 int main() {
     srand((unsigned)time(NULL));
     int current_turn = 1; /* odd: Player1, even: Player2 */
@@ -120,7 +254,7 @@ int main() {
             strcpy(current_player_name, player2_name);
         }
 
-        printf("Enter your guess(Example: 1 2 3 4): ");
+        printf("Enter your guess(Example: 0 1 2 3): ");
         int guess[4];
         scanf("%d %d %d %d", &guess[0], &guess[1], &guess[2], &guess[3]);
         printf("Guess: %d%d%d%d\n", guess[0], guess[1], guess[2], guess[3]);
@@ -130,23 +264,7 @@ int main() {
         print_guess_history(guesses);
 
         if (guess[0] == answer[0] && guess[1] == answer[1] && guess[2] == answer[2] && guess[3] == answer[3]) {
-            printf("\n");
-            printf("  ____                             _         _       _   _                 _ \n");
-            printf(" / ___|___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_(_) ___  _ __  ___| |\n");
-            printf("| |   / _ \\| '_ \\ / _` | '__/ _` | __| | | | |/ _` | __| |/ _ \\| '_ \\/ __| |\n");
-            printf("| |__| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \\__ \\_|\n");
-            printf(" \\____\\___/|_| |_|\\__, |_|  \\__,_|\\__|\\__,_|_|\\__,_|\\__|_|\\___/|_| |_|___(_)\n");
-            printf("                  |___/                                                       \n");
-            printf("\n");
-            printf("          **  **  **  **  **  **  **  **  **  **  **  **  **\n");
-            printf("         ****************************************************\n");
-            printf("          **                                              **\n");
-            printf("           **    %s WINS THE GAME!    **\n", current_player_name);
-            printf("          **                                              **\n");
-            printf("         ****************************************************\n");
-            printf("          **  **  **  **  **  **  **  **  **  **  **  **  **\n");
-            printf("\n");
-            printf("                 🎉 🎊 🏆 VICTORY! 🏆 🎊 🎉\n");
+            display_winner_result(current_player_name);
             printf("\n");
             printf("              Answer: %d%d%d%d | Turns taken: %d\n", answer[0], answer[1], answer[2], answer[3], current_turn);
             printf("\n");
